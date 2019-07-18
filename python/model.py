@@ -21,9 +21,9 @@ def make_layers(block, no_relu_layers):
 
     return nn.Sequential(OrderedDict(layers))
 
-class bodypose_model(nn.Module):
+class bodypose_model(nn.Module): # 继承父类
     def __init__(self):
-        super(bodypose_model, self).__init__()
+        super(bodypose_model, self).__init__() # 【super() 函数是用于调用父类(超类)的一个方法】，使用父类nn.Module的初始化函数进行初始化
 
         # these layers have no relu layer
         no_relu_layers = ['conv5_5_CPM_L1', 'conv5_5_CPM_L2', 'Mconv7_stage2_L1',\
@@ -31,7 +31,7 @@ class bodypose_model(nn.Module):
                           'Mconv7_stage4_L1', 'Mconv7_stage4_L2', 'Mconv7_stage5_L1',\
                           'Mconv7_stage5_L2', 'Mconv7_stage6_L1', 'Mconv7_stage6_L1']
         blocks = {}
-        block0 = OrderedDict({'conv1_1': [3, 64, 3, 1, 1],
+        block0 = OrderedDict({'conv1_1': [3, 64, 3, 1, 1], 
                   'conv1_2': [64, 64, 3, 1, 1],
                   'pool1_stage1': [2, 2, 0],
                   'conv2_1': [64, 128, 3, 1, 1],
@@ -46,7 +46,9 @@ class bodypose_model(nn.Module):
                   'conv4_2': [512, 512, 3, 1, 1],
                   'conv4_3_CPM': [512, 256, 3, 1, 1],
                   'conv4_4_CPM': [256, 128, 3, 1, 1]})
-
+        # OrderedDict 是 dict 的子类，其最大特征是，它可以“维护”添加 key-value 对的顺序。简单来说，就是先添加的 key-value 对排在前面，
+        # 后添加的 key-value 对排在后面。由于 OrderedDict 能维护 key-value 对的添加顺序，因此即使两个 OrderedDict 中的 key-value 对完
+        # 全相同，但只要它们的顺序不同，程序在判断它们是否相等时也依然会返回 false。
 
         # Stage 1
         block1_1 = OrderedDict({'conv5_1_CPM_L1': [128, 128, 3, 1, 1],
