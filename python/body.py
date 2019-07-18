@@ -12,12 +12,14 @@ from torchvision import transforms
 
 class Body(object):
     def __init__(self, model_path):
-        self.model = bodypose_model()
+        self.model = bodypose_model() # 创建模型
         if torch.cuda.is_available():
             self.model = self.model.cuda()
-        model_dict = util.transfer(self.model, torch.load(model_path))
-        self.model.load_state_dict(model_dict)
-        self.model.eval()
+        model_dict = util.transfer(self.model, torch.load(model_path)) # 参数格式转换
+        self.model.load_state_dict(model_dict) # 导入参数
+        self.model.eval() # 使网络中bn层和dropout层失效。
+                          # 训练完train_datasets之后，在测试model前，也就是model(test_datasets)之前，需要加上model.eval()。
+                          # 否则的话，有输入数据，即使不训练，它也会改变权值。这是model中含有batch normalization和dropout层所带来的的性质。
 
     def __call__(self, oriImg):
         # scale_search = [0.5, 1.0, 1.5, 2.0]
